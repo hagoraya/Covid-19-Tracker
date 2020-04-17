@@ -9,19 +9,17 @@ import { Container, Row, Col, Alert } from 'react-bootstrap';
 
 //My components
 import Main from './components/main.component'
+import Header from './components/header.component'
 
 function App() {
   return (
-
     <Container>
       <Row className="justify-content-md-center">
-        <h1>Covid-19 Data</h1>
+        <Header></Header>
+
       </Row>
       <Main></Main>
     </Container>
-
-
-
 
   );
 }
