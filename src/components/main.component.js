@@ -13,6 +13,10 @@ const styles = theme => ({
         textAlign: 'center',
         color: theme.palette.text.secondary
     },
+
+    appbar: {
+        marginBottom: 0.5,
+    }
 });
 
 class Main extends Component {
@@ -20,6 +24,7 @@ class Main extends Component {
         super(props);
         this.state = {
             covidData: [],
+            lastUpdated: null,
             isLoaded: false,
         }
     }
@@ -29,9 +34,12 @@ class Main extends Component {
             .then(res => res.json())
             .then(json => {
                 console.log(json);
+                const currTime = new Date().toLocaleString();
+
                 this.setState({
                     isLoaded: true,
-                    covidData: json
+                    covidData: json,
+                    lastUpdated: currTime,
                 })
             });
     }
@@ -47,10 +55,12 @@ class Main extends Component {
                 </Typography>
 
                         <Typography align="right" variant="caption" >
-                            Last Updated: Few moments ago
-                </Typography>
+                            Last Updated: {this.state.lastUpdated}
+                        </Typography>
                     </Toolbar>
                 </AppBar>
+
+                <br></br>
 
                 <Container maxWidth="xl">
                     <Grid container spacing={3}>
