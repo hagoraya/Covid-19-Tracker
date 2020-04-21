@@ -33,19 +33,23 @@ class Main extends Component {
         fetch('https://covid19.mathdro.id/api')
             .then(res => res.json())
             .then(json => {
-                console.log(json);
-                const currTime = new Date().toLocaleString();
-
+                // console.log(json);
                 this.setState({
                     isLoaded: true,
                     covidData: json,
-                    lastUpdated: currTime,
+                    lastUpdated: new Date().toLocaleString(),
                 })
+                console.log(this.state.covidData)
             });
     }
 
     render() {
         const { classes } = this.props;
+
+        if (this.state.covidData === 0) {
+            return null;
+        }
+
         return (
             <div>
                 <AppBar position="sticky">
@@ -55,7 +59,7 @@ class Main extends Component {
                 </Typography>
 
                         <Typography align="right" variant="caption" >
-                            Last Updated: {this.state.lastUpdated}
+                            Last Updated: {this.state.covidData.lastUpdate}
                         </Typography>
                     </Toolbar>
                 </AppBar>
@@ -65,7 +69,7 @@ class Main extends Component {
                 <Container maxWidth="xl">
                     <Grid container spacing={3}>
                         <Grid item md={4} xs={12}>
-                            <Paper className={classes.paper} square>Confirmed <br></br> 1054</Paper>
+                            <Paper className={classes.paper} square>Confirmed <br></br> {this.state.covidData.confirmed ? this.state.covidData.confirmed.value : 'Data not loaded'}  </Paper>
                         </Grid>
 
                         <Grid item md={4} xs={12}>
