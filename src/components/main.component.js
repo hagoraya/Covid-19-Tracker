@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
 
 
+
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { withStyles } from "@material-ui/core/styles";
-//import { Container, Row, Col, Alert } from 'react-bootstrap';
-import { Toolbar, AppBar, Typography, Container, Paper, Grid, MuiThemeProvider, } from '@material-ui/core';
+import { Toolbar, AppBar, Typography, Container, Paper, Grid, MuiThemeProvider, Divider } from '@material-ui/core';
 
+//TODO Fix last updated format
+//TODO add colours to each status number papers
+//TODO add number animation 
 
 const styles = theme => ({
     paper: {
@@ -73,22 +76,20 @@ class Main extends Component {
                         </Grid>
 
                         <Grid item md={4} xs={12}>
-                            <Paper className={classes.paper} square>Recovered <br></br> 1054</Paper>
+                            <Paper className={classes.paper} square>Recovered <br></br> {this.state.covidData.recovered ? this.state.covidData.recovered.value : 'Data not loaded'} </Paper>
                         </Grid>
 
                         <Grid item md={4} xs={12}>
-                            <Paper className={classes.paper} square>Deaths <br></br> 1054</Paper>
+                            <Paper className={classes.paper} square>Deaths <br></br> {this.state.covidData.deaths ? this.state.covidData.deaths.value : 'Date not loaded'}</Paper>
                         </Grid>
 
                         <Grid item md={12} xs={12}>
                             <Paper className={classes.paper} square>More Info <br></br> </Paper>
                         </Grid>
-
-
                     </Grid>
-
+                    <br></br>
+                    <Divider ></Divider>
                 </Container>
-
             </div>
         );
     }
