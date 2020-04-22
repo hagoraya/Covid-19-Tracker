@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import CountUp from 'react-countup';
 
 
 
@@ -8,7 +9,6 @@ import { Toolbar, AppBar, Typography, Container, Paper, Grid, MuiThemeProvider, 
 
 //TODO Fix last updated format
 //TODO add colours to each status number papers
-//TODO add number animation 
 
 const styles = theme => ({
     paper: {
@@ -72,19 +72,19 @@ class Main extends Component {
                 <Container maxWidth="xl">
                     <Grid container spacing={3}>
                         <Grid item md={4} xs={12}>
-                            <Paper className={classes.paper} square>Confirmed <br></br> {this.state.covidData.confirmed ? this.state.covidData.confirmed.value : 'Data not loaded'}  </Paper>
+                            <Paper className={classes.paper} square>Confirmed <br></br> {this.state.covidData.confirmed ? <CountUp end={this.state.covidData.confirmed.value} duration={1}></CountUp> : 'Data not loaded'}  </Paper>
                         </Grid>
 
                         <Grid item md={4} xs={12}>
-                            <Paper className={classes.paper} square>Recovered <br></br> {this.state.covidData.recovered ? this.state.covidData.recovered.value : 'Data not loaded'} </Paper>
+                            <Paper className={classes.paper} square>Recovered <br></br> {this.state.covidData.recovered ? <CountUp end={this.state.covidData.recovered.value} duration={1}></CountUp> : 'Data not loaded'} </Paper>
                         </Grid>
 
                         <Grid item md={4} xs={12}>
-                            <Paper className={classes.paper} square>Deaths <br></br> {this.state.covidData.deaths ? this.state.covidData.deaths.value : 'Date not loaded'}</Paper>
+                            <Paper className={classes.paper} square>Deaths <br></br> {this.state.covidData.deaths ? <CountUp end={this.state.covidData.deaths.value} duration={1}></CountUp> : 'Date not loaded'}</Paper>
                         </Grid>
 
                         <Grid item md={12} xs={12}>
-                            <Paper className={classes.paper} square>More Info <br></br> </Paper>
+                            <Paper className={classes.paper} square>More Info <br></br>  </Paper>
                         </Grid>
                     </Grid>
                     <br></br>
