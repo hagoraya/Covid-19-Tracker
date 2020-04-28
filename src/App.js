@@ -21,6 +21,7 @@ function App() {
   return (
     <div>
       <Main></Main>
+      <br></br>
       <Footer></Footer>
 
     </div>

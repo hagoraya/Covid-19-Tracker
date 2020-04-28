@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import CountUp from 'react-countup';
+import ReactFlagsSelect from 'react-flags-select';
+
 
 
 
@@ -9,6 +11,7 @@ import { Toolbar, AppBar, Typography, Container, Paper, Grid, MuiThemeProvider, 
 
 //TODO Fix last updated format
 //TODO add colours to each status number papers
+//TODO add commas in numbers
 
 const styles = theme => ({
     paper: {
@@ -29,10 +32,21 @@ class Main extends Component {
             covidData: [],
             lastUpdated: null,
             isLoaded: false,
+            countryList: [],
         }
     }
 
     componentDidMount() {
+        this.getCovidData();
+
+
+
+        //fetch country list
+        this.getCountryList();
+
+    }
+
+    getCovidData() {
         fetch('https://covid19.mathdro.id/api')
             .then(res => res.json())
             .then(json => {
@@ -42,9 +56,35 @@ class Main extends Component {
                     covidData: json,
                     lastUpdated: new Date().toLocaleString(),
                 })
-                console.log(this.state.covidData)
+                console.log("Covid Data:")
+                //  console.log(this.state.covidData)
             });
     }
+
+    getCountryList() {
+        fetch('https://covid19.mathdro.id/api/countries')
+            .then(res => res.json())
+            .then(json => {
+
+                var countries = [];
+                for (var i = 0; i <= json.length; i++) {
+                    countries.push(json.countries[i].name)
+                }
+
+                console.log("1st country:")
+                console.log(json.countries[0].name)
+                console.log("json len" + json.length)
+
+                this.setState({
+                    isLoaded: true,
+                    countryList: json
+                })
+                console.log("Country List: ")
+                console.log(this.state.countryList);
+            });
+    }
+
+
 
     render() {
         const { classes } = this.props;
@@ -76,19 +116,42 @@ class Main extends Component {
                         </Grid>
 
                         <Grid item md={4} xs={12}>
-                            <Paper className={classes.paper} square>Recovered <br></br> {this.state.covidData.recovered ? <CountUp end={this.state.covidData.recovered.value} duration={1}></CountUp> : 'Data not loaded'} </Paper>
+                            <Paper className={classes.paper} square>Recovered <br></br> {this.state.covidData.recovered ? <CountUp end={this.state.covidData.recovered.value} duration={1.5}></CountUp> : 'Data not loaded'} </Paper>
                         </Grid>
 
                         <Grid item md={4} xs={12}>
-                            <Paper className={classes.paper} square>Deaths <br></br> {this.state.covidData.deaths ? <CountUp end={this.state.covidData.deaths.value} duration={1}></CountUp> : 'Date not loaded'}</Paper>
+                            <Paper className={classes.paper} square>Deaths <br></br> {this.state.covidData.deaths ? <CountUp end={this.state.covidData.deaths.value} duration={2}></CountUp> : 'Date not loaded'}</Paper>
                         </Grid>
-
+                        <ReactFlagsSelect
+                            placeholder="Select Country.."
+                        ></ReactFlagsSelect>
                         <Grid item md={12} xs={12}>
                             <Paper className={classes.paper} square>More Info <br></br>  </Paper>
                         </Grid>
                     </Grid>
                     <br></br>
                     <Divider ></Divider>
+                    <br></br>
+                    <div>
+                        {this.state.countryList.countries ?
+                            <div>
+                                <ul>
+                                    {this.state.countryList.countries.map(function (country, index) {
+                                        return (
+                                            <div key={index}>
+                                                <p>{country.name}</p>
+                                            </div>
+                                        )
+                                    })}
+                                </ul>
+                            </div>
+                            :
+                            <p>loading....</p>}
+                    </div>
+
+
+                    <br></br>
+
                 </Container>
             </div>
         );
