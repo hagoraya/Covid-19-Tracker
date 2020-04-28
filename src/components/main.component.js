@@ -7,7 +7,7 @@ import ReactFlagsSelect from 'react-flags-select';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { withStyles } from "@material-ui/core/styles";
-import { Toolbar, AppBar, Typography, Container, Paper, Grid, MuiThemeProvider, Divider } from '@material-ui/core';
+import { Toolbar, AppBar, Typography, Container, Paper, Grid, MuiThemeProvider, Divider, borders, Box } from '@material-ui/core';
 
 //TODO Fix last updated format
 //TODO add colours to each status number papers
@@ -17,12 +17,28 @@ const styles = theme => ({
     paper: {
         padding: theme.spacing(2),
         textAlign: 'center',
-        color: theme.palette.text.secondary
+        color: theme.palette.text.secondary,
+
     },
 
     appbar: {
         marginBottom: 0.5,
+    },
+
+    box: {
+        textAlign: 'center',
+        color: theme.palette.text.secondary,
+        padding: theme.spacing(2),
+        border: 1,
+        m: 1,
+        borderColor: 'text.primary',
+
+
     }
+
+
+
+
 });
 
 class Main extends Component {
@@ -33,20 +49,16 @@ class Main extends Component {
             lastUpdated: null,
             isLoaded: false,
             countryList: [],
+            canadaData: []
         }
     }
 
     componentDidMount() {
-        this.getCovidData();
-
-
-
-        //fetch country list
-        this.getCountryList();
-
+        this.getGlobalData();
+        this.getCanadaData();
     }
 
-    getCovidData() {
+    getGlobalData() {
         fetch('https://covid19.mathdro.id/api')
             .then(res => res.json())
             .then(json => {
@@ -58,6 +70,21 @@ class Main extends Component {
                 })
                 console.log("Covid Data:")
                 //  console.log(this.state.covidData)
+            });
+    }
+
+    getCanadaData() {
+        fetch('https://covid19.mathdro.id/api/countries/Canada')
+            .then(res => res.json())
+            .then(json => {
+                console.log("Canada: ")
+                console.log(json);
+                this.setState({
+                    isLoaded: true,
+                    canadaData: json,
+                    lastUpdated: new Date().toLocaleString(),
+                })
+
             });
     }
 
@@ -95,22 +122,15 @@ class Main extends Component {
 
         return (
             <div>
-                <AppBar position="sticky">
-                    <Toolbar>
-                        <Typography variant="h6" style={{ flex: 1 }}>
-                            COVID-19 Worldwide Statistics
-                </Typography>
-
-                        <Typography align="right" variant="caption" >
-                            Last Updated: {this.state.covidData.lastUpdate}
-                        </Typography>
-                    </Toolbar>
-                </AppBar>
 
                 <br></br>
 
-                <Container maxWidth="xl">
+                <Container maxWidth="md">
                     <Grid container spacing={3}>
+                        <Grid item md={12} xs={12}>
+                            <Box className={classes.paper} square>Global Cases <br></br>  </Box>
+                        </Grid>
+
                         <Grid item md={4} xs={12}>
                             <Paper className={classes.paper} square>Confirmed <br></br> {this.state.covidData.confirmed ? <CountUp end={this.state.covidData.confirmed.value} duration={1}></CountUp> : 'Data not loaded'}  </Paper>
                         </Grid>
@@ -122,32 +142,28 @@ class Main extends Component {
                         <Grid item md={4} xs={12}>
                             <Paper className={classes.paper} square>Deaths <br></br> {this.state.covidData.deaths ? <CountUp end={this.state.covidData.deaths.value} duration={2}></CountUp> : 'Date not loaded'}</Paper>
                         </Grid>
-                        <ReactFlagsSelect
-                            placeholder="Select Country.."
-                        ></ReactFlagsSelect>
+
                         <Grid item md={12} xs={12}>
-                            <Paper className={classes.paper} square>More Info <br></br>  </Paper>
+                            <Box className={classes.paper} square>Canada Stats <br></br>  </Box>
                         </Grid>
+
+                        <Grid item md={4} xs={12}>
+                            <Paper className={classes.paper} >Confirmed <br></br> {this.state.canadaData.confirmed ? <CountUp end={this.state.canadaData.confirmed.value} duration={1}></CountUp> : 'Data not loaded'}  </Paper>
+                        </Grid>
+
+                        <Grid item md={4} xs={12}>
+                            <Paper className={classes.paper} >Recovered <br></br> {this.state.canadaData.recovered ? <CountUp end={this.state.canadaData.recovered.value} duration={1}></CountUp> : 'Data not loaded'}  </Paper>
+                        </Grid>
+
+                        <Grid item md={4} xs={12}>
+                            <Paper className={classes.paper}>Deaths <br></br> {this.state.canadaData.deaths ? <CountUp end={this.state.canadaData.deaths.value} duration={1}></CountUp> : 'Data not loaded'}  </Paper>
+                        </Grid>
+
                     </Grid>
                     <br></br>
                     <Divider ></Divider>
                     <br></br>
-                    <div>
-                        {this.state.countryList.countries ?
-                            <div>
-                                <ul>
-                                    {this.state.countryList.countries.map(function (country, index) {
-                                        return (
-                                            <div key={index}>
-                                                <p>{country.name}</p>
-                                            </div>
-                                        )
-                                    })}
-                                </ul>
-                            </div>
-                            :
-                            <p>loading....</p>}
-                    </div>
+
 
 
                     <br></br>

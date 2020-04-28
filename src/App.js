@@ -20,6 +20,7 @@ import Footer from './components/footer.component'
 function App() {
   return (
     <div>
+      <Header></Header>
       <Main></Main>
       <br></br>
       <Footer></Footer>
