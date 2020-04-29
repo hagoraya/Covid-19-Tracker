@@ -8,3 +8,4 @@ LIVE: https://covid-19-tracker-3hwamqix1.now.sh
 
 Deployed using [vercel](vercel.com)
 
+Data from [Mathdroid](https://github.com/mathdroid/covid-19-api)
