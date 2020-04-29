@@ -1,16 +1,14 @@
 import React, { Component } from 'react';
 import CountUp from 'react-countup';
-import ReactFlagsSelect from 'react-flags-select';
+
 
 
 
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { withStyles } from "@material-ui/core/styles";
-import { Toolbar, AppBar, Typography, Container, Paper, Grid, MuiThemeProvider, Divider, borders, Box } from '@material-ui/core';
+import { Typography, Container, Paper, Grid, Divider } from '@material-ui/core';
 
-//TODO Fix last updated format
-//TODO add colours to each status number papers
 //TODO add commas in numbers
 
 const styles = theme => ({
@@ -32,9 +30,32 @@ const styles = theme => ({
         border: 1,
         m: 1,
         borderColor: 'text.primary',
+    },
+
+    main_text: {
+        textAlign: 'center',
+    },
 
 
-    }
+    paper_confirmed: {
+        padding: theme.spacing(2),
+        textAlign: 'center',
+        color: "#ff9800",
+        fontSize: "15px"
+    },
+
+    paper_recovered: {
+        padding: theme.spacing(2),
+        textAlign: 'center',
+        color: '#05b584'
+
+    },
+
+    paper_death: {
+        padding: theme.spacing(2),
+        textAlign: 'center',
+        color: "#ec314b"
+    },
 
 
 
@@ -56,20 +77,21 @@ class Main extends Component {
     componentDidMount() {
         this.getGlobalData();
         this.getCanadaData();
+        this.getYesterdayData();
     }
 
     getGlobalData() {
         fetch('https://covid19.mathdro.id/api')
             .then(res => res.json())
             .then(json => {
-                // console.log(json);
+                //  console.log(json);
                 this.setState({
                     isLoaded: true,
                     covidData: json,
-                    lastUpdated: new Date().toLocaleString(),
+                    lastUpdated: json.lastUpdate
                 })
-                console.log("Covid Data:")
-                //  console.log(this.state.covidData)
+                //  console.log("Covid last update:")
+                //  console.log(this.state.lastUpdated)
             });
     }
 
@@ -77,8 +99,8 @@ class Main extends Component {
         fetch('https://covid19.mathdro.id/api/countries/Canada')
             .then(res => res.json())
             .then(json => {
-                console.log("Canada: ")
-                console.log(json);
+                //  console.log("Canada: ")
+                // console.log(json);
                 this.setState({
                     isLoaded: true,
                     canadaData: json,
@@ -86,6 +108,10 @@ class Main extends Component {
                 })
 
             });
+    }
+
+    getYesterdayData() {
+
     }
 
     getCountryList() {
@@ -128,40 +154,81 @@ class Main extends Component {
                 <Container maxWidth="md">
                     <Grid container spacing={3}>
                         <Grid item md={12} xs={12}>
-                            <Box className={classes.paper} square>Global Cases <br></br>  </Box>
+                            <Typography className={classes.main_text} variant="h4">COVID-19 Outbreak</Typography>
+                            <Typography className={classes.main_text} variant="subtitle1">Data from <a href="https://github.com/mathdroid/covid-19-api">Mathdroid</a> API</Typography>
+
+                            <br></br>
+
+                            <Divider></Divider>
+                            <br></br>
+                            <Typography className={classes.main_text} variant="h4">Global Cases</Typography>
                         </Grid>
 
                         <Grid item md={4} xs={12}>
-                            <Paper className={classes.paper} square>Confirmed <br></br> {this.state.covidData.confirmed ? <CountUp end={this.state.covidData.confirmed.value} duration={1}></CountUp> : 'Data not loaded'}  </Paper>
+                            <Paper className={classes.paper_confirmed} color="red">
+                                <Typography variant="h6">{this.state.covidData.confirmed ?
+                                    <CountUp end={this.state.covidData.confirmed.value} duration={1}></CountUp> : 'Data not loaded'}
+                                </Typography>
+                                <Typography variant="subtitle1">Confirmed</Typography>
+                            </Paper>
                         </Grid>
 
                         <Grid item md={4} xs={12}>
-                            <Paper className={classes.paper} square>Recovered <br></br> {this.state.covidData.recovered ? <CountUp end={this.state.covidData.recovered.value} duration={1.5}></CountUp> : 'Data not loaded'} </Paper>
+                            <Paper className={classes.paper_recovered}>
+                                <Typography variant="h6">{this.state.covidData.recovered ?
+                                    <CountUp end={this.state.covidData.recovered.value} duration={1.5}></CountUp> : 'Data not loaded'}
+                                </Typography>
+                                <Typography variant="subtitle1">Recovered</Typography>
+                            </Paper>
                         </Grid>
 
                         <Grid item md={4} xs={12}>
-                            <Paper className={classes.paper} square>Deaths <br></br> {this.state.covidData.deaths ? <CountUp end={this.state.covidData.deaths.value} duration={2}></CountUp> : 'Date not loaded'}</Paper>
+                            <Paper className={classes.paper_death} >
+                                <Typography variant="h6">{this.state.covidData.deaths ?
+                                    <CountUp end={this.state.covidData.deaths.value} duration={2}></CountUp> : 'Date not loaded'}
+                                </Typography>
+                                <Typography variant="subtitle1">Deaths</Typography>
+                            </Paper>
                         </Grid>
 
                         <Grid item md={12} xs={12}>
-                            <Box className={classes.paper} square>Canada Stats <br></br>  </Box>
+                            <Typography className={classes.main_text} variant="h4">  Canada Cases</Typography>
                         </Grid>
 
                         <Grid item md={4} xs={12}>
-                            <Paper className={classes.paper} >Confirmed <br></br> {this.state.canadaData.confirmed ? <CountUp end={this.state.canadaData.confirmed.value} duration={1}></CountUp> : 'Data not loaded'}  </Paper>
+                            <Paper className={classes.paper_confirmed} >
+                                <Typography variant="h6">{this.state.canadaData.confirmed ?
+                                    <CountUp end={this.state.canadaData.confirmed.value} duration={1}></CountUp> : 'Data not loaded'}
+                                </Typography>
+                                <Typography variant="subtitle1">Confirmed</Typography>
+                            </Paper>
                         </Grid>
 
                         <Grid item md={4} xs={12}>
-                            <Paper className={classes.paper} >Recovered <br></br> {this.state.canadaData.recovered ? <CountUp end={this.state.canadaData.recovered.value} duration={1}></CountUp> : 'Data not loaded'}  </Paper>
+                            <Paper className={classes.paper_recovered} >
+                                <Typography variant="h6">{this.state.canadaData.recovered ?
+                                    <CountUp end={this.state.canadaData.recovered.value} duration={1.5}></CountUp> : 'Data not loaded'}
+                                </Typography>
+                                <Typography variant="subtitle1">Recovered</Typography>
+                            </Paper>
                         </Grid>
 
                         <Grid item md={4} xs={12}>
-                            <Paper className={classes.paper}>Deaths <br></br> {this.state.canadaData.deaths ? <CountUp end={this.state.canadaData.deaths.value} duration={1}></CountUp> : 'Data not loaded'}  </Paper>
+                            <Paper className={classes.paper_death}> <Typography variant="h6">{this.state.canadaData.deaths ?
+                                <CountUp end={this.state.canadaData.deaths.value} duration={2}></CountUp> : 'Data not loaded'}
+                            </Typography>
+                                <Typography variant="subtitle1">Deaths</Typography>
+
+                            </Paper>
+                        </Grid>
+
+                        <br></br>
+
+                        <Grid item md={12} xs={12}>
+                            <Typography className={classes.main_text} variant="subtitle1">Last Update: {this.state.lastUpdated}</Typography>
                         </Grid>
 
                     </Grid>
-                    <br></br>
-                    <Divider ></Divider>
                     <br></br>
 
 

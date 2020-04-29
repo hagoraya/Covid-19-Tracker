@@ -1,4 +1,5 @@
 import React from 'react';
+import './App.css'
 
 
 //Bootstrap Components
@@ -12,6 +13,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Main from './components/main.component'
 import Header from './components/header.component'
 import Footer from './components/footer.component'
+import { grey } from '@material-ui/core/colors';
 
 
 
@@ -24,7 +26,6 @@ function App() {
       <Main></Main>
       <br></br>
       <Footer></Footer>
-
     </div>
 
   );
