@@ -5,5 +5,5 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 Built with React
 
 LIVE: https://covid-19-tracker-3hwamqix1.now.sh
-
+Deployed using [vercel](vercel.com)
 
